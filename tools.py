@@ -116,8 +116,8 @@ def _parse_date(value):
 def _fmt(dt):
     return dt.strftime("%Y-%m-%d %H:%M (%A)")
 
-def tool_list_doctors(conn, speciality = None):
-    rows = database.list_doctors(conn, speciality)
+def tool_list_doctors(conn, specialty = None):
+    rows = database.list_doctors(conn, specialty)
     if not rows:
         return {"doctors": [], "message": "No doctors found matching that specialty."}
     return {"doctors": rows}

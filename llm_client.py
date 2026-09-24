@@ -22,6 +22,13 @@ Be concise and friendly. Confirm key details (doctor, date/time) back to the pat
 successfull booking, cancellation or reschedule.
 """
 
+PATIENT_SCOPED_TOOLS = {
+    "book_appointment",
+    "list_appointment",
+    "cancel_appointment",
+    "reschedule_appointment",
+}
+
 class UpstreamError(Exception):
     def __init__(self, message):
         super().__init__(message)
@@ -89,8 +96,10 @@ def call_tools(conn, patient, messages, max_tool_round = 6):
             if func is None:
                 result = {"error": f"Unkown tool '{name}'."}
             else:
+                if name in PATIENT_SCOPED_TOOLS:
+                    args["patient_id"] = patient["id"]
                 try:
-                    result = func(conn, patient["id"], **args)
+                    result = func(conn, **args)
                 except TypeError as exc:
                     result = {"error": f"Invalid arguments for '{name}': '{exc}'"}
 
